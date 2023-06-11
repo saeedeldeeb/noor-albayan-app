@@ -34,6 +34,4 @@ Route.group(() => {
     Route.get('/', 'ProfileController.view').as('profile.view').middleware(['auth'])
     Route.put('/update', 'ProfileController.update').as('profile.update').middleware(['auth'])
   }).prefix('/profile')
-
 }).prefix('api/v1/:lang')
-

@@ -1,11 +1,17 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
 export default class UpdateProfileValidator {
-    constructor(protected ctx: HttpContextContract){}
+  constructor(protected ctx: HttpContextContract) {}
+
   public schema = schema.create({
     username: schema.string({}, [
       rules.maxLength(50),
-      rules.unique({ table: 'users', column: 'username', whereNot: { id: this.ctx.auth.user?.id } }),
+      rules.unique({
+        table: 'users',
+        column: 'username',
+        whereNot: { id: this.ctx.auth.user?.id },
+      }),
     ]),
     email: schema.string({}, [
       rules.email(),
@@ -22,8 +28,3 @@ export default class UpdateProfileValidator {
     'email.unique': 'The email has already been taken.',
   }
 }
-
-
-
-
-
