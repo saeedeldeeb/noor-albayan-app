@@ -26,19 +26,18 @@ export default class AuthController {
     return response.ok(user)
   }
 
-  public async login({ request, response, auth }: HttpContextContract) {
-    let token
-    // grab uid and password values off request body
-    const { uid, password } = request.only(['uid', 'password'])
+  public async login({ request, auth }: HttpContextContract) {
+    const { email, password } = request.only(['email', 'password'])
+
     try {
-      // attempt to login
-      token = await auth.attempt(uid, password)
+      const token = await auth.use('api').attempt(email, password)
+
+      return token.toJSON()
     } catch (error) {
-      // if login fails, return vague form message and redirect back
-      return response.unauthorized({ message: 'Email or password not correct' })
+      return {
+        error: 'Invalid credentials',
+      }
     }
-    // otherwise, redirect to home page
-    return response.ok({ token: token })
   }
 
   public async logout({ response, auth }: HttpContextContract) {
